@@ -5,11 +5,13 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import routes from './routes';
 import AppError from './errors/AppError';
+import isAuthenticated from '@shared/http/middlewares/auth';
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(isAuthenticated);
 app.use('/api/v1', routes);
 
 app.use(
