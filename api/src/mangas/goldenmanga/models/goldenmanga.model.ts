@@ -1,8 +1,3 @@
-export interface GenresModel {
-  name: string;
-  pageUrl: string;
-}
-
 export interface GenreModel {
   name: string;
   urlImage: string;

@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import isAuthenticated from '../middlewares/auth';
 import goldenRoutes from '@mangas/goldenmanga/routes';
+import brMangasRoutes from '@mangas/brmangas/routes';
 
 const routes = Router();
 
-routes.use('/goldenmangas', isAuthenticated, goldenRoutes);
+routes.use('/goldenmangas', goldenRoutes);
+routes.use('/brmangas', brMangasRoutes);
 
 export default routes;
