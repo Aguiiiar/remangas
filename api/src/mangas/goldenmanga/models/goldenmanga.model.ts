@@ -10,10 +10,13 @@ export interface GenreModel {
 }
 
 export interface MangaModel {
-  title: string;
-  urlImage: string;
-  genres: string[];
-  author: string;
-  status: string;
-  chapters: string[];
+  title: string | null;
+  urlImage: string | null;
+  genres: Array<string | null>;
+  author: string | null;
+  status: string | null;
+  chapters: Array<{
+    chapter: string;
+    pageUrl: string;
+  }>;
 }

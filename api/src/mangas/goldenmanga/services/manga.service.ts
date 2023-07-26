@@ -1,9 +1,4 @@
-import {
-  FetchHelper,
-  JSDOMHelper,
-  extractSlugFromUrl,
-  filterArray,
-} from '@shared/helpers';
+import { extractSlugFromUrl, FetchHelper, JSDOMHelper } from '@shared/helpers';
 import { MangaModel } from '../models/goldenmanga.model';
 import AppError from '@shared/http/errors/AppError';
 
@@ -11,57 +6,61 @@ export class MangaService {
   private baseUrl = 'https://goldenmanga.top';
   private fetch = new FetchHelper(this.baseUrl);
 
-  public async handle(pageUrl: string): Promise<MangaModel[] | any> {
-    // const extractSlug = extractSlugFromUrl(pageUrl);
+  public async handle(pageUrl: string): Promise<MangaModel[]> {
+    const extractSlug = extractSlugFromUrl(pageUrl);
 
-    // console.log(extractSlug);
+    if (!extractSlug) {
+      throw new AppError('Page url not found', 404);
+    }
 
-    // if (!extractSlug) {
-    //   throw new AppError('Page url not found', 404);
-    // }
+    const data: string = await this.fetch.get(`/mangas/${extractSlug}`);
+    const document = new JSDOMHelper(data);
 
-    // const data: string = await this.fetch.get(`/mangas/${extractSlug}`);
-    // const document = new JSDOMHelper(data);
+    const mangaData = document.getElement('.manga');
 
-    // const mangaData = document.getElement('.manga');
+    const title = mangaData
+      ?.querySelector('.img-responsive')
+      ?.getAttribute('title');
 
-    // const title = mangaData
-    //   ?.querySelector('.img-responsive')
-    //   ?.getAttribute('title');
-    // const urlImage =
-    //   this.baseUrl +
-    //   mangaData?.querySelector('.img-responsive')?.getAttribute('src');
+    const urlImage =
+      this.baseUrl +
+      mangaData?.querySelector('.img-responsive')?.getAttribute('src');
 
-    // const genresElementH5 = mangaData?.querySelector('h5.cg_color');
-    // const genresElementsA = genresElementH5?.querySelectorAll('a');
+    const elementsH5 = mangaData?.querySelector('h5.cg_color');
 
-    // const genres = genresElementsA?.forEach(element => {
-    //   console.log(
-    //     element.textContent?.trim() !== '' ? element.textContent : '',
-    //   );
-    // });
+    const genresElementsA = elementsH5?.querySelectorAll('a');
+    const genres =
+      Array.from(genresElementsA || [])
+        .map(gen => gen.textContent)
+        .filter(gen => gen) || [];
 
-    // console.log(genres);
+    const elementsArray = Array.from(
+      mangaData?.querySelectorAll('h5.cg_color') || [],
+    ).map(elem => elem.textContent);
 
-    // const manga = {
-    //   title,
-    //   urlImage,
-    //   // genres: filterArray(genres),
-    // };
+    const chapters = Array.from(
+      mangaData?.querySelectorAll('.capitulos li') || [],
+    ).map(elem => ({
+      chapter:
+        elem
+          .querySelector('div')
+          ?.textContent?.match(/\n\nCap (\d+(\.\d+)?) \n/)?.[1] || '',
+      pageUrl: this.baseUrl + elem.querySelector('a')?.getAttribute('href'),
+    }));
 
-    // console.log(genresSplit);
+    if (!title) {
+      throw new AppError('Manga not found', 404);
+    }
 
-    // console.log(genres?.textContent?.replace('Genero:', '').trim());
-    // const chapters = document.getAllElements('.capitulos');
-    // chapters.forEach(chapter => {
-    //   console.log(chapter);
-    // });
-
-    // const genresMangas: GenresModel[] = Array.from(mangas).map(manga => ({
-    //   name: manga.textContent || '',
-    //   pageUrl: this.baseUrl + (manga.getAttribute('href') || ''),
-    // }));
-
-    return 'manga';
+    return [
+      {
+        title,
+        urlImage,
+        genres,
+        author: elementsArray[1]?.replace('Autor: ', '') || '',
+        status: elementsArray[3]?.replace('Status: ', '') || '',
+        chapters,
+      },
+    ];
   }
 }

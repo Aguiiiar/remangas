@@ -3,7 +3,7 @@ import { GenreService, GenresService } from '../services';
 
 export class GenresController {
   async genres(request: Request, response: Response): Promise<Response> {
-    const adult: boolean = request.query.adult === 'true' ? true : false;
+    const adult: boolean = request.query.adult === 'true';
     const genres = await new GenresService().handle(adult);
 
     return response.status(200).json(genres);

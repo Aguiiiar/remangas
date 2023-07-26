@@ -30,12 +30,6 @@ export class GenreService {
         this.baseUrl + (manga.querySelector('a')?.getAttribute('href') || ''),
     }));
 
-    console.log(
-      transformString(
-        'Kono Subarashii Sekai ni Shukufuku wo! - KazuMegu (Doujinshi)',
-      ),
-    );
-
     if (genresMangas.length === 0) {
       throw new AppError('Genre page not found', 404);
     }
