@@ -1,5 +1,4 @@
 import { FetchHelper, JSDOMHelper } from '@shared/helpers';
-import * as console from 'console';
 import { MangaReaderModel } from '@mangas/goldenmanga/models/goldenmanga.model';
 
 interface MangaRequest {
