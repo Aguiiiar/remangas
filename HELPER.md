@@ -2,24 +2,16 @@
 
 routes
  - genres
-   - id
    - name
    - pageUrl
- - mangas name-website-manga{[]}
-   - id
+ - mangas genre-manga{[]}
    - name
    - pageUrl
  - manga/:manga
     - id
     - name
-    - urlImage
     - urlBanner
     - chapters[{}]
-    - lastChapter
  - manga/reader/:manga
-    - id
-    - name
-    - urlImage
-    - chapterImages[],
-    - pageCounter
-    - currentPage
+    - pageImageUrl
+    - page

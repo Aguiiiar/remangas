@@ -20,3 +20,8 @@ export interface MangaModel {
     pageUrl: string;
   }>;
 }
+
+export interface MangaReaderModel {
+  pageImageUrl: string | null;
+  page: string | null;
+}
