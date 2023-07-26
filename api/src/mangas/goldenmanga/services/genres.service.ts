@@ -1,5 +1,5 @@
 import { FetchHelper, JSDOMHelper } from '@shared/helpers';
-import { GenresModel } from '../models/goldenmanga.model';
+import { findAdult, GenresModel } from '@shared/helpers/find-adult';
 
 export class GenresService {
   private baseUrl = 'https://goldenmanga.top';
@@ -16,15 +16,6 @@ export class GenresService {
       pageUrl: this.baseUrl + (manga.getAttribute('href') || ''),
     }));
 
-    return this.filterAdultGenres(genresMangas, adult);
-  }
-
-  private filterAdultGenres(
-    genres: GenresModel[],
-    adult: boolean,
-  ): GenresModel[] {
-    return adult
-      ? genres
-      : genres.filter(genre => !genre.name.includes('Adulto'));
+    return findAdult(genresMangas, adult);
   }
 }
