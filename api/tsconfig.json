@@ -15,7 +15,7 @@
     "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     "paths": {
       "@mangas/*": [
-        "src/mangas/*"
+        "src/modules/*"
       ],
       "@shared/*": [
         "src/shared/*"
