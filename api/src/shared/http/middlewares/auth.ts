@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import AppError from '../errors/AppError';
+import { Unauthorized } from '../errors/';
 
 export default function isAuthenticated(
   request: Request,
@@ -8,18 +8,18 @@ export default function isAuthenticated(
 ): void {
   const authorization = request.headers.authorization;
   if (!authorization) {
-    throw new AppError('Authorization Token is missing', 401);
+    throw new Unauthorized('Authorization Token is missing');
   }
 
   const token = authorization.replace('Authorization ', '');
 
   try {
     if (!verifyToken(token)) {
-      throw new AppError('Invalid token', 401);
+      throw new Unauthorized('Invalid token');
     }
     return next();
   } catch {
-    throw new AppError('Invalid Token', 401);
+    throw new Unauthorized('Invalid Token');
   }
 }
 

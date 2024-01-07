@@ -4,8 +4,8 @@ import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import routes from './routes';
-import AppError from './errors/AppError';
 import isAuthenticated from '@shared/http/middlewares/auth';
+import { AppError } from './errors';
 
 const app = express();
 
