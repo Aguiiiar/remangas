@@ -1,5 +1,4 @@
 import { FetchHelper, JSDOMHelper } from '@shared/helpers';
-import * as console from 'console';
 import { findAdult, GenresModel } from '@shared/helpers/find-adult';
 
 export class GenresService {
@@ -19,7 +18,6 @@ export class GenresService {
       pageUrl: genre.getAttribute('href'),
     }));
 
-    console.log(genresData?.innerHTML);
     return findAdult(genres, adult);
   }
 }
